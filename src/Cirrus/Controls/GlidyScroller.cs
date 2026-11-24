@@ -257,9 +257,10 @@ public partial class GlidyScroller : Panel
         for (var i = 0; i < scroller._items.Count; i++)
         {
             var visual = ElementCompositionPreview.GetElementVisual(scroller._items[i]);
-            var offsetAnimation = visual.Compositor.CreateScalarKeyFrameAnimation();
-            offsetAnimation.Duration = TimeSpan.FromMilliseconds(1000);
-            offsetAnimation.InsertKeyFrame(1f, scroller._childOffsets[i] - actualOffset);
+            var offsetAnimation = visual.Compositor.CreateSpringScalarAnimation();
+            offsetAnimation.DampingRatio = 0.8f;
+            offsetAnimation.Period = TimeSpan.FromMilliseconds(125);
+            offsetAnimation.FinalValue = scroller._childOffsets[i] - actualOffset;
             if (delay && ((scrollingUpward && i > newIdx) || (!scrollingUpward && i < newIdx)))
             {
                 offsetAnimation.DelayTime = TimeSpan.FromMilliseconds(60 * Math.Abs(i - newIdx));
